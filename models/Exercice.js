@@ -5,7 +5,6 @@ const ExerciceSchema = new mongoose.Schema(
   {
     coachId: {
       type: String,
-      required: true,
     },
     name: {
       type: String,

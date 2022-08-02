@@ -36,7 +36,7 @@ const CoachSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    favorites: {
+    favoritesExercices: {
       type: Array,
       default: [],
     }

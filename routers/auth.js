@@ -50,13 +50,20 @@ router.post('/login', async (req, res) => {
     console.log('login', { ...others, accessToken });
     res.status(200).cookie('token', accessToken).json({
       isAdmin: others.isAdmin,
-      favorites: others.favorites,
-      id: others._id
+      favoritesExercices: others.favoritesExercices,
+      id: others._id,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json(err);
   }
+});
+
+router.get('/logout', async (req, res) => {
+  res
+    .clearCookie('access_token')
+    .status(200)
+    .json({ message: 'Successfully logged out 😏 🍀' });
 });
 
 module.exports = router;

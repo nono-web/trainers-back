@@ -40,10 +40,9 @@ router.post('/', verifyToken, async (req, res) => {
     }
   });
 
-  router.get('/:userId', verifyTokenAdmin, async (req, res) => {
+  router.get('/:coachId', verifyTokenAdmin, async (req, res) => {
     try {
-      const trainingPlanes = await TrainingPlane.find({userId : req.params.userId});
-  
+      const trainingPlanes = await TrainingPlane.find({coachId : req.params.coachId});
       res.status(200).json(trainingPlanes);
     } catch (err) {
       res.status(500).json(err);

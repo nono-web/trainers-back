@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const { verifyToken, verifyTokenAdmin } = require('../middleware/verifyToken');
 const Exercice = require('../models/Exercice');
+const multer = require('multer');
+
+const upload = multer({ dest: 'uploads/exercices' });
 
 router.post('/', async (req, res) => {
   const newExercice = new Exercice(req.body);
@@ -52,6 +55,21 @@ router.delete('/:id', async (req, res) => {
     res.status(200).json('L/"exercice a bien été supprimé');
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+router.post('/',  upload.single('img') , async (req, res) => {
+  try {
+    const [{ insertId: id }] = await new Exercice.save(req.body, req.file.path);
+    return res.status(201).json({
+      id,
+      ...req.body,
+     img: req.file.filename,
+    });
+  
+  } catch (errors) {
+    console.log(errors);
+    return res.status(500).json({ errors });
   }
 });
 
