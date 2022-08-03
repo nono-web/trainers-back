@@ -35,36 +35,55 @@ router.post('/favoritesExercices/:id', async (req, res) => {
 });
 
 router.post('/removeOneFavoriteExe/:id', async (req, res) => {
-  const coachId = req.params.id;
-  const { favoriteExId } = req.body;
-  console.log('favoriteExId', favoriteExId);
-
-  const { favoritesExercices } = await Coach.findById(coachId);
-
-  console.log('favorites Exercices', favoritesExercices);
-
-  if (!favoritesExercices) {
-    return res
-      .status(404)
-      .json({ message: 'favoritesExercices doesn t exist' });
-  }
-
   try {
-    await Coach.findOneAndUpdate(
-      { _id: coachId },
-      { $pull: { favoritesExercices: { _id: ObjectID(favoriteExId) } } }
+    const coachId = req.params.id;
+    const { favoriteExId } = req.body;
+    console.log('ccoach id', coachId);
+
+    const { favoritesExercices } = await Coach.findById(coachId);
+
+    if (!favoritesExercices) {
+      return res
+        .status(404)
+        .json({ message: 'favoritesExercices doesn t exist' });
+    }
+    await Coach.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { favoritesExercices: favoriteExId } },
+      { safe: true, upsert: true }
     ).then((data) => {
       if (!data) {
         return res.status(404).send({
           message: `Cannot remove favorite Exercice`,
         });
-      } else res.status(200).json({ response: favoriteExId });
+      } else {
+        console.log(data);
+        res.status(200).json({ response: favoriteExId });
+      }
     });
   } catch (error) {
     console.log(error);
     return res
       .status(400)
       .json({ message: 'Too many favoritesExercices to remove.' });
+  }
+});
+
+// get favorite exercices list
+
+router.get('/favoritesExList/:coachId', async (req, res) => {
+  const coachId = req.params.coachId;
+  if (!ObjectID.isValid(coachId)) {
+    return res.status(400).send('ID unknown : ' + coachId);
+  }
+  try {
+    const { favoritesExercices } = await Coach.findById(coachId);
+
+    res.status(200).json(favoritesExercices);
+  } catch (err) {
+    res.status(500).json({
+      message: 'Coach id doesnt exist',
+    });
   }
 });
 

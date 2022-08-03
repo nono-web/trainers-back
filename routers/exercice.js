@@ -51,8 +51,8 @@ router.get('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await Exercice.findByIdAndDelete(req.params.id);
-    res.status(200).json('L/"exercice a bien été supprimé');
+    const refreshExerciceList = await Exercice.findByIdAndDelete(req.params.id);
+    res.status(200).json(refreshExerciceList);
   } catch (err) {
     res.status(500).json(err);
   }
