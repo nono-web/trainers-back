@@ -107,7 +107,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     req.body.password = await argon2.hash(req.body.password);
     const updatedCoach = await Coach.findByIdAndUpdate(

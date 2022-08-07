@@ -41,6 +41,9 @@ router.post('/login', async (req, res) => {
       {
         id: coach._id,
         isAdmin: coach.isAdmin,
+        username: coach.username,
+        firstname : coach.firstname,
+        lastname: coach.lastname
       },
       process.env.JWT_SEC,
       { expiresIn: '3d' }
@@ -52,6 +55,9 @@ router.post('/login', async (req, res) => {
       isAdmin: others.isAdmin,
       favoritesExercices: others.favoritesExercices,
       id: others._id,
+      username: others.username,
+      firstname:others. firstname,
+      lastname: others.lastname,
     });
   } catch (err) {
     console.log(err);

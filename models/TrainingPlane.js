@@ -6,6 +6,10 @@ const TrainingPlaneSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    trainingName : {
+      type: String,
+      required: true,
+    },
     exercices: [
       {
         exercicesId: {
@@ -17,6 +21,12 @@ const TrainingPlaneSchema = new mongoose.Schema(
         },
       },
     ],
+    total_time : {
+      type: Number
+    },
+    nbTotal_exercices : {
+      type: Number
+    },
   },
   { timestamps: true }
 );

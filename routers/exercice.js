@@ -5,7 +5,7 @@ const multer = require('multer');
 
 const upload = multer({ dest: 'uploads/exercices' });
 
-router.post('/', async (req, res) => {
+router.post('/',verifyToken, async (req, res) => {
   const newExercice = new Exercice(req.body);
   try {
     const savedExercice = await newExercice.save();

@@ -5,7 +5,7 @@ const {
 } = require('../middleware/verifyToken');
 const TrainingPlane = require('../models/TrainingPlane');
 
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', async (req, res) => {
     const newTrainingPlane = new TrainingPlane(req.body);
     try {
       const savedTrainingPlane = await newTrainingPlane.save();
@@ -15,7 +15,7 @@ router.post('/', verifyToken, async (req, res) => {
     }
   });
 
-  router.get('/',verifyToken, async (req, res) => {
+  router.get('/', async (req, res) => {
     try {
       const trainingPlanes  = await TrainingPlane.find();
       res.status(200).json(trainingPlanes);
@@ -40,7 +40,7 @@ router.post('/', verifyToken, async (req, res) => {
     }
   });
 
-  router.get('/:coachId', verifyTokenAdmin, async (req, res) => {
+  router.get('/:coachId', async (req, res) => {
     try {
       const trainingPlanes = await TrainingPlane.find({coachId : req.params.coachId});
       res.status(200).json(trainingPlanes);
@@ -49,7 +49,17 @@ router.post('/', verifyToken, async (req, res) => {
     }
   });
 
-  router.delete('/:id', verifyToken, async (req, res) => {
+  router.get('/:id/details', async (req, res) => {
+    try {
+      const trainingPlanes = await TrainingPlane.findById( req.params.id);
+  
+      res.status(200).json(trainingPlanes);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+  router.delete('/:id', async (req, res) => {
     try {
       await TrainingPlane.findByIdAndDelete(req.params.id);
       res.status(200).json('L/"entrainement a bien été supprimé');

@@ -12,9 +12,10 @@ const verifyToken = (req, res, next) => {
       if (err) res.status(403).json({message: "You are not authenticated!"});
       req.coach = coach;
       next();
+     
     });
   };
-
+  
   const verifyTokenAdmin = (req, res, next) => {
     verifyToken(req, res, () => {
       if (req.coach.isAdmin) {
