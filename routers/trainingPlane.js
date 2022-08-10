@@ -1,11 +1,10 @@
 const router = require('express').Router();
 const {
-  verifyTokenAdmin,
   verifyToken
 } = require('../middleware/verifyToken');
 const TrainingPlane = require('../models/TrainingPlane');
 
-router.post('/', async (req, res) => {
+router.post('/', verifyToken,async (req, res) => {
     const newTrainingPlane = new TrainingPlane(req.body);
     try {
       const savedTrainingPlane = await newTrainingPlane.save();
@@ -49,7 +48,7 @@ router.post('/', async (req, res) => {
     }
   });
 
-  router.get('/:id/details', async (req, res) => {
+  router.get('/details/:id', async (req, res) => {
     try {
       const trainingPlanes = await TrainingPlane.findById( req.params.id);
   
@@ -59,7 +58,7 @@ router.post('/', async (req, res) => {
     }
   });
 
-  router.delete('/:id', async (req, res) => {
+  router.delete('/:id',verifyToken, async (req, res) => {
     try {
       await TrainingPlane.findByIdAndDelete(req.params.id);
       res.status(200).json('L/"entrainement a bien été supprimé');

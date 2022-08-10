@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { verifyToken, verifyTokenAdmin } = require('../middleware/verifyToken');
+const { verifyToken } = require('../middleware/verifyToken');
 const Exercice = require('../models/Exercice');
 const multer = require('multer');
 
@@ -49,27 +49,12 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',verifyToken, async (req, res) => {
   try {
     const refreshExerciceList = await Exercice.findByIdAndDelete(req.params.id);
     res.status(200).json(refreshExerciceList);
   } catch (err) {
     res.status(500).json(err);
-  }
-});
-
-router.post('/',  upload.single('img') , async (req, res) => {
-  try {
-    const [{ insertId: id }] = await new Exercice.save(req.body, req.file.path);
-    return res.status(201).json({
-      id,
-      ...req.body,
-     img: req.file.filename,
-    });
-  
-  } catch (errors) {
-    console.log(errors);
-    return res.status(500).json({ errors });
   }
 });
 

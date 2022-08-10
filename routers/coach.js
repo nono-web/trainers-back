@@ -1,4 +1,4 @@
-const { verifyTokenAdmin, verifyToken } = require('../middleware/verifyToken');
+const { verifyToken } = require('../middleware/verifyToken');
 const argon2 = require('argon2');
 const Coach = require('../models/Coach');
 const ObjectID = require('mongoose').Types.ObjectId;
@@ -96,7 +96,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id',verifyToken, async (req, res) => {
   try {
     const coach = await Coach.findById(req.params.id);
     const { password, ...others } = coach._doc;
@@ -107,7 +107,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id',verifyToken, async (req, res) => {
   try {
     req.body.password = await argon2.hash(req.body.password);
     const updatedCoach = await Coach.findByIdAndUpdate(
@@ -124,7 +124,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id',verifyToken, async (req, res) => {
   try {
     await Coach.findByIdAndDelete(req.params.id);
     res.status(200).json("L'entraineur a bien été supprimé");
