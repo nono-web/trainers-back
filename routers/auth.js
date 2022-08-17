@@ -50,7 +50,6 @@ router.post('/login', async (req, res) => {
     );
 
     const { password, ...others } = coach._doc;
-    console.log('login', { ...others, accessToken });
       res.cookie('token', accessToken, {
         expires  : new Date(Date.now() + 9999999),
         httpOnly : true

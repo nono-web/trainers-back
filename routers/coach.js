@@ -38,7 +38,6 @@ router.post('/removeOneFavoriteExe/:id', async (req, res) => {
   try {
     const coachId = req.params.id;
     const { favoriteExId } = req.body;
-    console.log('ccoach id', coachId);
 
     const { favoritesExercices } = await Coach.findById(coachId);
 
@@ -96,7 +95,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id',verifyToken, async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
   try {
     const coach = await Coach.findById(req.params.id);
     const { password, ...others } = coach._doc;
@@ -107,7 +106,7 @@ router.get('/:id',verifyToken, async (req, res) => {
   }
 });
 
-router.put('/:id',verifyToken, async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   try {
     req.body.password = await argon2.hash(req.body.password);
     const updatedCoach = await Coach.findByIdAndUpdate(
@@ -124,7 +123,7 @@ router.put('/:id',verifyToken, async (req, res) => {
   }
 });
 
-router.delete('/:id',verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   try {
     await Coach.findByIdAndDelete(req.params.id);
     res.status(200).json("L'entraineur a bien été supprimé");

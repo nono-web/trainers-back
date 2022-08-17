@@ -10,7 +10,7 @@ router.post('/', verifyToken,async (req, res) => {
       const savedTrainingPlane = await newTrainingPlane.save();
       res.status(200).json(savedTrainingPlane);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json("Le nom de l'entrainement est obligatoire");
     }
   });
 
@@ -48,7 +48,7 @@ router.post('/', verifyToken,async (req, res) => {
     }
   });
 
-  router.get('/details/:id', async (req, res) => {
+  router.get('/details/:id',verifyToken, async (req, res) => {
     try {
       const trainingPlanes = await TrainingPlane.findById( req.params.id);
   
